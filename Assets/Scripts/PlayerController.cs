@@ -1,13 +1,16 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerController : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     // Variables 
+                //public variables appear in the inspector, private dont//
     public float speed = 5f; // player speed
     public float groundDist = 0.5f; // distance to ground
-    public LayerMask terrainLayer;
+    public LayerMask terrainLayer; // only checking a specific layer
     public Rigidbody rb;
+    public SpriteRenderer sr;
   
     // end of variables
 
@@ -26,6 +29,7 @@ public class PlayerController : MonoBehaviour
     {
         Movement();
         GroundCheck();
+        SpriteFlip();
     }
     // user defined functions
     void Movement()
@@ -50,7 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit hit;
         Vector3 castPos = transform.position + Vector3.up * 0.5f; // Start raycast slightly above the player
-        if (Physics.Raycast(castPos, -Vector3.up, out hit, groundDist + 0.1f, terrainLayer))
+        if (Physics.Raycast(castPos, -Vector3.up, out hit, groundDist + 0.1f, terrainLayer)) // checking if the ray hits the ground
         {
             Vector3 movePos = transform.position;
             movePos.y = hit.point.y + groundDist;
@@ -59,6 +63,17 @@ public class PlayerController : MonoBehaviour
             rb.MovePosition(movePos);
         }
     }
+
+    void SpriteFlip() // fliping the sprite depending on the direction the player is moving
+    {
+        float x = Input.GetAxis("Horizontal");
+        if (x != 0)
+        {
+            sr.flipX = x < 0;
+        }
+    }
+
+
 
     // end of user defined functions
 
