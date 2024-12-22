@@ -35,13 +35,25 @@ public class WindUp : MonoBehaviour
 
         if (isDragging)
         {
+            Vector2 mousePosition = Input.mousePosition; // vector2 for 2D space (Don't need a Z cord)
+
             // calculate the direction of the mouse based on the center of the wind up area
+            Vector2 center = windUpArea.position;
+            Vector2 direction = mousePosition - center;
             // calculate the angle between the current mouse pos and the previous one
             // check if the angle is positive - clockwise rotation
+            if ( > 0)
             // increase the windup based on the windupspeed and delta time
+            {
+                currentWindUp += windUpSpeed * Time.deltaTime;
+            }
             // restrict the max wind up value
+            currentWindUp = Mathf.Clamp(currentWindUp, 0f, maxWindUp);
             // Show values in the log
+            Debug.Log("Current Wind-Up: " + currentWindUp);
+            Debug.Log("Fill Amount: " + windUpImage.fillAmount);
             // update the last mouse position
+            lastMousePosition = mousePosition;
         }
     }
 }
