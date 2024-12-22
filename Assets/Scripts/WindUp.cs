@@ -1,6 +1,8 @@
 using System.Data;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.Rendering;
 
 public class WindUp : MonoBehaviour
 {
@@ -13,9 +15,22 @@ public class WindUp : MonoBehaviour
     private float currentWindUp = 0f; // current value
     private bool isDragging = false;
     private Vector2 lastMousePosition;
+
+
+    public Volume volume;
+    private Vignette vignette;
+     public float initialVignetteIntensity = 0.8f; // Starting intensity of the vignette
     // end of variables
     void Start()
     {
+        // Try to get the Vignette component from the volume profile
+        if (volume.profile.TryGet<Vignette>(out vignette))
+        {
+            // Ensure Vignette is enabled in the volume
+            vignette.active = true;
+            // start vignette at initial value
+            vignette.intensity.value = initialVignetteIntensity;
+        }
         
     }
 
@@ -55,6 +70,9 @@ public class WindUp : MonoBehaviour
                 currentWindUp = Mathf.Clamp(currentWindUp, 0f, maxWindUp);
                 // Show values in the log
                 Debug.Log("Current Wind-Up: " + currentWindUp);
+
+                AdjustVignetteIntensity();
+
                 // update the last mouse position
                 lastMousePosition = mousePosition;
             }
@@ -70,5 +88,16 @@ public class WindUp : MonoBehaviour
 
         // Check if the mouse is inside the wind-up area's bounds
         return rectTransform.rect.Contains(localMousePosition);
+    }
+
+    // Adjust the vignette intensity based on the current wind-up value
+    private void AdjustVignetteIntensity()
+    {
+        if (vignette != null)
+        {
+            // Map the current wind-up (0 to maxWindUp) to vignette intensity (0 to 1)
+            float intensity = 1f - (currentWindUp / maxWindUp); // Higher wind-up, less dark
+            vignette.intensity.value = intensity;  // Set the vignette intensity
+        }
     }
 }
