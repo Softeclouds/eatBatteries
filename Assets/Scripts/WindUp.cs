@@ -37,23 +37,39 @@ public class WindUp : MonoBehaviour
         {
             Vector2 mousePosition = Input.mousePosition; // vector2 for 2D space (Don't need a Z cord)
 
-            // calculate the direction of the mouse based on the center of the wind up area
-            Vector2 center = windUpArea.position;
-            Vector2 direction = mousePosition - center;
-            // calculate the angle between the current mouse pos and the previous one
-            // check if the angle is positive - clockwise rotation
-            if ( > 0)
-            // increase the windup based on the windupspeed and delta time
+            // check to see if mouse is in the wind up area
+            if (IsMouseInsideArea(mousePosition))
             {
-                currentWindUp += windUpSpeed * Time.deltaTime;
+                // calculate the direction of the mouse based on the center of the wind up area
+                Vector2 center = windUpArea.position;
+                Vector2 direction = mousePosition - center;
+                // calculate the angle between the current mouse pos and the previous one
+                float angleDifference = Vector2.SignedAngle(lastMousePosition - center, mousePosition - center);
+                // check if the angle is positive - clockwise rotation
+                if (angleDifference < 0)
+                // increase the windup based on the windupspeed and delta time
+                {
+                    currentWindUp += windUpSpeed * Time.deltaTime;
+                }
+                // restrict the max wind up value
+                currentWindUp = Mathf.Clamp(currentWindUp, 0f, maxWindUp);
+                // Show values in the log
+                Debug.Log("Current Wind-Up: " + currentWindUp);
+                Debug.Log("Fill Amount: " + windUpImage.fillAmount);
+                // update the last mouse position
+                lastMousePosition = mousePosition;
             }
-            // restrict the max wind up value
-            currentWindUp = Mathf.Clamp(currentWindUp, 0f, maxWindUp);
-            // Show values in the log
-            Debug.Log("Current Wind-Up: " + currentWindUp);
-            Debug.Log("Fill Amount: " + windUpImage.fillAmount);
-            // update the last mouse position
-            lastMousePosition = mousePosition;
         }
+    }
+       private bool IsMouseInsideArea(Vector2 mousePosition)
+    {
+        // Get the RectTransform of the wind-up area
+        RectTransform rectTransform = windUpArea;
+
+        // Convert the mouse position to the wind-up area local position
+        Vector2 localMousePosition = rectTransform.InverseTransformPoint(mousePosition);
+
+        // Check if the mouse is inside the wind-up area's bounds
+        return rectTransform.rect.Contains(localMousePosition);
     }
 }
