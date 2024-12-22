@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Rendering;
+using Unity.Collections;
 
 public class WindUp : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class WindUp : MonoBehaviour
     public Volume volume;
     private Vignette vignette;
      public float initialVignetteIntensity = 0.8f; // Starting intensity of the vignette
+
+
+     public float decayRate = 5f; // how quickly it depletes
+     public float depletionTimer = 0f; // timer to track when to deplete
     // end of variables
     void Start()
     {
@@ -41,6 +46,9 @@ public class WindUp : MonoBehaviour
         {
             isDragging = true;
             lastMousePosition = Input.mousePosition;
+
+            // Reset the depletion timer when the player starts dragging
+            depletionTimer = 0f;
         }
 
         if (Input.GetMouseButtonUp(0)) // stop dragging
@@ -77,6 +85,11 @@ public class WindUp : MonoBehaviour
                 lastMousePosition = mousePosition;
             }
         }
+        else
+        {
+            // If not dragging, deplete the wind-up over time
+            DepleteWindUpOverTime();
+        }
     }
        private bool IsMouseInsideArea(Vector2 mousePosition)
     {
@@ -98,6 +111,25 @@ public class WindUp : MonoBehaviour
             // Map the current wind-up (0 to maxWindUp) to vignette intensity (0 to 1)
             float intensity = 1f - (currentWindUp / maxWindUp); // Higher wind-up, less dark
             vignette.intensity.value = intensity;  // Set the vignette intensity
+        }
+    }
+
+    private void DepleteWindUpOverTime()
+    {
+        // Increase the depletion timer as time passes
+        depletionTimer += Time.deltaTime;
+
+        // If the depletion timer has reached the decay rate, deplete the wind-up
+        if (depletionTimer >= decayRate)
+        {
+            currentWindUp -= 1f * Time.deltaTime; // Slow depletion
+            currentWindUp = Mathf.Clamp(currentWindUp, 0f, maxWindUp);
+
+            // Update the fill amount of the image to show the wind-up progress
+            windUpImage.fillAmount = currentWindUp / maxWindUp;
+
+            // Adjust the vignette intensity based on the current wind-up value
+            AdjustVignetteIntensity();
         }
     }
 }
