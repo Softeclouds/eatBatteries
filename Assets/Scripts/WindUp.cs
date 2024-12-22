@@ -55,7 +55,6 @@ public class WindUp : MonoBehaviour
                 currentWindUp = Mathf.Clamp(currentWindUp, 0f, maxWindUp);
                 // Show values in the log
                 Debug.Log("Current Wind-Up: " + currentWindUp);
-                Debug.Log("Fill Amount: " + windUpImage.fillAmount);
                 // update the last mouse position
                 lastMousePosition = mousePosition;
             }
