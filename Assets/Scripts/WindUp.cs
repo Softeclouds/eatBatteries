@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,15 +22,26 @@ public class WindUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) // start dragging
         {
             isDragging = true;
             lastMousePosition = Input.mousePosition;
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0)) // stop dragging
         {
             isDragging = false;
+        }
+
+        if (isDragging)
+        {
+            // calculate the direction of the mouse based on the center of the wind up area
+            // calculate the angle between the current mouse pos and the previous one
+            // check if the angle is positive - clockwise rotation
+            // increase the windup based on the windupspeed and delta time
+            // restrict the max wind up value
+            // Show values in the log
+            // update the last mouse position
         }
     }
 }
