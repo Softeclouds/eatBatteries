@@ -5,9 +5,28 @@ using UnityEngine.SceneManagement;
 
 public class MainStory : MonoBehaviour
 {
+    public Animator transition;
+    public float transitionTime = 1f;
+
     private void OnEnable()
     {
-        //Only specify the sceneName or sceneBuildIntex will load the scene with the single mode
-        SceneManager.LoadScene("Game", LoadSceneMode.Single);
+        LoadNextLevel();
+    }
+
+
+    public void LoadNextLevel()
+    {
+       StartCoroutine(LoadLevel(SceneManager.GetActiveScene().buildIndex + 1));
+    }
+
+    IEnumerator LoadLevel(int levelIndex)
+    {
+        
+        // PLay animation
+        transition.SetTrigger("Start");
+        // Wait
+        yield return new WaitForSeconds(transitionTime);
+        // Load scene
+        SceneManager.LoadScene(levelIndex);
     }
 }
