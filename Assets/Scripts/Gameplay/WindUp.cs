@@ -77,7 +77,7 @@ public class WindUp : MonoBehaviour
                 // restrict the max wind up value
                 currentWindUp = Mathf.Clamp(currentWindUp, 0f, maxWindUp);
                 // Show values in the log
-                Debug.Log("Current Wind-Up: " + currentWindUp);
+                //Debug.Log("Current Wind-Up: " + currentWindUp);
 
                 AdjustVignetteIntensity();
 
