@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 
 public class PlayerInteraction : MonoBehaviour
@@ -10,8 +11,11 @@ public class PlayerInteraction : MonoBehaviour
 
     public string interactionType;
 
+    public GameObject uiPanel; // The UI panel to show/hide
+    public TextMeshProUGUI uiText; 
     private void Start()
     {
+        uiPanel.SetActive(false);
         playerTransform = transform;  // The player's transform (position and rotation)
     }
 
@@ -42,6 +46,7 @@ public class PlayerInteraction : MonoBehaviour
                             break;
                         case "Informative":
                             Info(interactableObject.gameObject);
+                            //ShowUI();
                             break;
                         default: // Incase type is not set
                             Debug.Log("Unknown interaction type: " + objectInteractions.InteractionType);
@@ -75,5 +80,25 @@ public class PlayerInteraction : MonoBehaviour
         // Checking to see if its getting the right objs
         Debug.Log("Checking info of: " + interactableObject.name); 
         // bring up UI for information
+        //ShowUI();
+        // close UI
+        if (Input.anyKeyDown || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
+        {
+            CloseUI();
+        }
+    }
+
+   /* public void ShowUI(string message = "Press any key or mouse button to close.")
+    {
+        uiPanel.SetActive(true);   // Show the UI panel
+        if (uiText != null)
+        {
+            uiText.text = message; 
+        }
+    } */
+
+    private void CloseUI()
+    {
+        uiPanel.SetActive(false);  // Hide the UI panel
     }
 }
