@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public SpriteRenderer sr;
     public WindUp windUpScript;
+
+    private bool canMove = false;
   
     // end of variables
 
@@ -28,7 +30,10 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(canMove)
+        {
         Movement();
+        }
         GroundCheck();
         SpriteFlip();
         UpdateSpeed();
@@ -81,6 +86,11 @@ public class PlayerController : MonoBehaviour
         {
             // Example: Speed increases as the wind-up value increases
             speed = Mathf.Lerp(5f, 15f, windUpScript.currentWindUp / windUpScript.maxWindUp);
+
+            if(windUpScript.currentWindUp >= windUpScript.maxWindUp)
+            {
+                canMove = true;
+            }
         }
     }
 
