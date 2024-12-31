@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask terrainLayer; // only checking a specific layer
     public Rigidbody rb;
     public SpriteRenderer sr;
+    public WindUp windUpScript;
   
     // end of variables
 
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
         Movement();
         GroundCheck();
         SpriteFlip();
+        UpdateSpeed();
     }
     // user defined functions
     void Movement()
@@ -73,7 +75,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    void UpdateSpeed()
+    {
+        if (windUpScript != null)
+        {
+            // Example: Speed increases as the wind-up value increases
+            speed = Mathf.Lerp(5f, 15f, windUpScript.currentWindUp / windUpScript.maxWindUp);
+        }
+    }
 
     // end of user defined functions
 

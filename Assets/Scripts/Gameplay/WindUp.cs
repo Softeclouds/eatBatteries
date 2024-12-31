@@ -13,7 +13,7 @@ public class WindUp : MonoBehaviour
     public RectTransform windUpArea; // the area in which you can wind up
     public float windUpSpeed = 10f; // How fast the windup occurs
     public float maxWindUp = 100f; // max value
-    private float currentWindUp = 0f; // current value
+    public float currentWindUp = 0f; // current value
     private bool isDragging = false;
     private Vector2 lastMousePosition;
 
